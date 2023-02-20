@@ -1,0 +1,63 @@
+version: 2.1
+
+jobs:
+  compile:
+    docker:
+      - image: circleci/openjdk:19-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle dependencies
+      - run: gradle compileJava
+      - run: gradle compileTestJava
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+  lint-main:
+    docker:
+      - image: circleci/openjdk:19-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle checkstyleMain
+
+  lint-test:
+    docker:
+      - image: circleci/openjdk:19-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle checkstyleTest
+
+  test:
+    docker:
+      - image: circleci/openjdk:19-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle test
+
+workflows:
+  default:
+    jobs:
+      - compile
+      - lint-main
+          requires: [compile]
+      - lint-test
+          requires: [compile]
+      - test
+          requires: [compile]
