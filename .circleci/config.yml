@@ -72,6 +72,7 @@ jobs:
       - run: gradle test
 
   build-and-push-image:
+    working_directory: /app
     docker:
       - image: docker
     steps:
