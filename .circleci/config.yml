@@ -71,6 +71,17 @@ jobs:
             - v1-dependencies-
       - run: gradle test
 
+  build-jar:
+    docker:
+      - image: cimg/openjdk:19.0.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle bootJar
+
   build-and-push-image:
     working_directory: /app
     docker:
@@ -110,5 +121,7 @@ workflows:
           requires: [load-dependencies]
       - test:
           requires: [load-dependencies]
-      - build-and-push-image:
+      - build-jar:
           requires: [test, lint-test, lint-main, compile-main, compile-test]
+      - build-and-push-image:
+          requires: [build-jar]
