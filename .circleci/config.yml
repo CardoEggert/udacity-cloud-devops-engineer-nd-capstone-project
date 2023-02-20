@@ -81,10 +81,10 @@ jobs:
             - v1-dependencies-{{ checksum "build.gradle" }}
             - v1-dependencies-
       - run: gradle bootJar
-      - save_cache:
+      - persist_to_workspace:
+          root: ~/
           paths:
-            - ~/build
-          key: build-${CIRCLE_WORKFLOW_ID:0:7}
+            - build/libs/HelloSpring-0.0.1-SNAPSHOT.jar
 
   build-and-push-image:
     working_directory: /app
@@ -93,9 +93,8 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - restore_cache:
-          keys:
-            - build-${CIRCLE_WORKFLOW_ID:0:7}
+      - attach_workspace:
+          at: ~/
       - run: ls -a
       - run:
           name: Build application Docker image
