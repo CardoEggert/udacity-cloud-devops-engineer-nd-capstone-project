@@ -95,7 +95,6 @@ jobs:
       - run: mkdir -p build/libs
       - attach_workspace:
           at: /build/libs
-      - run: ls -a
       - run:
           name: Build application Docker image
           command: |
@@ -103,7 +102,7 @@ jobs:
       - deploy:
           name: Push application Docker image
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "main" ]; then
               login="$(aws ecr get-login)"
               ${login}
               docker tag app "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
