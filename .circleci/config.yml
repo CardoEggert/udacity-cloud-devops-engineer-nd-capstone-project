@@ -72,6 +72,7 @@ jobs:
       - run: gradle test
 
   build-jar:
+    working_directory: /app
     docker:
       - image: cimg/openjdk:19.0.2
     steps:
@@ -82,18 +83,19 @@ jobs:
             - v1-dependencies-
       - run: gradle bootJar
       - persist_to_workspace:
-          root: ~/
+          root: build/libs
           paths:
-            - build/
+            - HelloSpring-0.0.1-SNAPSHOT.jar
 
   build-and-push-image:
+    working_directory: /app
     docker:
       - image: docker
     steps:
       - checkout
       - setup_remote_docker
       - attach_workspace:
-          at: ~/
+          at: /build/libs
       - run: ls -a
       - run:
           name: Build application Docker image
