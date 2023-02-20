@@ -88,7 +88,7 @@ jobs:
 
   build-and-push-image:
     docker:
-      - image: docker
+      - image: docker:17.05.0-ce-git
     steps:
       - checkout
       - setup_remote_docker
