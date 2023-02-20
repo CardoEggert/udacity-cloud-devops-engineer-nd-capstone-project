@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  compile:
+  load-dependencies:
     docker:
       - image: cimg/openjdk:19.0.2
     steps:
@@ -11,12 +11,32 @@ jobs:
             - v1-dependencies-{{ checksum "build.gradle" }}
             - v1-dependencies-
       - run: gradle dependencies
-      - run: gradle compileJava
-      - run: gradle compileTestJava
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
+
+  compile-main:
+    docker:
+      - image: cimg/openjdk:19.0.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle compileJava
+
+  compile-test:
+    docker:
+      - image: cimg/openjdk:19.0.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle compileTestJava
 
   lint-main:
     docker:
@@ -54,10 +74,14 @@ jobs:
 workflows:
   default:
     jobs:
-      - compile
+      - load-dependencies
+      - compile-main:
+          requires: [load-dependencies]
+      - compile-test:
+          requires: [load-dependencies]
       - lint-main:
-          requires: [compile]
+          requires: [load-dependencies]
       - lint-test:
-          requires: [compile]
+          requires: [load-dependencies]
       - test:
-          requires: [compile]
+          requires: [load-dependencies]

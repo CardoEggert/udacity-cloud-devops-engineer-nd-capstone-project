@@ -18,7 +18,7 @@ class HelloSpringApplicationTests {
 
   @Test
   void helloControllerTest_Amy() {
-    assertThat(helloController.hello("Amy")).isEqualTo("Hello Amy1!");
+    assertThat(helloController.hello("Amy")).isEqualTo("Hello Amy!");
   }
 
 }
