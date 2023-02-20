@@ -71,6 +71,29 @@ jobs:
             - v1-dependencies-
       - run: gradle test
 
+  build-and-push-image:
+    docker:
+      - image: docker
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build -tag=HelloSpringApp . 
+      - deploy:
+          name: Push application Docker image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              login="$(aws ecr get-login)"
+              ${login}
+              docker tag app "${ECR_ENDPOINT}/HelloSpringApp:${CIRCLE_SHA1}"
+              docker push "${ECR_ENDPOINT}/HelloSpringApp:${CIRCLE_SHA1}"
+            fi
+
 workflows:
   default:
     jobs:
@@ -85,3 +108,5 @@ workflows:
           requires: [load-dependencies]
       - test:
           requires: [load-dependencies]
+      - build-and-push-image:
+          requires: [test, lint-test, lint-main, compile-main, compile-test]
