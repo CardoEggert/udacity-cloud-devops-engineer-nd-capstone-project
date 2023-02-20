@@ -81,11 +81,10 @@ jobs:
             - v1-dependencies-{{ checksum "build.gradle" }}
             - v1-dependencies-
       - run: gradle bootJar
-      - run: ls -a
       - save_cache:
           paths:
             - ~/build
-          key: build-${CIRCLE_SHA1}
+          key: build-${CIRCLE_WORKFLOW_ID:0:7}
 
   build-and-push-image:
     working_directory: /app
@@ -96,7 +95,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - build-${CIRCLE_SHA1}
+            - build-${CIRCLE_WORKFLOW_ID:0:7}
       - run: ls -a
       - run:
           name: Build application Docker image
