@@ -81,6 +81,10 @@ jobs:
             - v1-dependencies-{{ checksum "build.gradle" }}
             - v1-dependencies-
       - run: gradle bootJar
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
   build-and-push-image:
     working_directory: /app
