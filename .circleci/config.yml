@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@2.0.3
 
 jobs:
   load-dependencies:
@@ -90,13 +92,9 @@ jobs:
     docker:
       - image: docker
     steps:
+      - aws-cli/setup 
       - checkout
       - setup_remote_docker
-      - run:
-          name: Install awscli
-          command: |
-            apk add --no-cache py-pip=9.0.0-r1
-            pip install awscli
       - run: mkdir -p build/libs
       - attach_workspace:
           at: /build/libs
