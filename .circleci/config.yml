@@ -81,6 +81,7 @@ jobs:
             - v1-dependencies-{{ checksum "build.gradle" }}
             - v1-dependencies-
       - run: gradle bootJar
+      - run: ls -a
       - save_cache:
           paths:
             - ~/build
@@ -96,6 +97,7 @@ jobs:
       - restore_cache:
           keys:
             - build-${CIRCLE_SHA1}
+      - run: ls -a
       - run:
           name: Build application Docker image
           command: |
