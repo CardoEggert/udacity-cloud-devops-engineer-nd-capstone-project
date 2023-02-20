@@ -84,10 +84,9 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - build/libs/HelloSpring-0.0.1-SNAPSHOT.jar
+            - build/
 
   build-and-push-image:
-    working_directory: /app
     docker:
       - image: docker
     steps:
