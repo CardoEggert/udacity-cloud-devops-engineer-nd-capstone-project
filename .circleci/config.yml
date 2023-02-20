@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-cli: circleci/aws-cli@2.0.3
+
 jobs:
   load-dependencies:
     docker:
@@ -88,8 +91,9 @@ jobs:
 
   build-and-push-image:
     docker:
-      - image: docker
+      - image: cimg/base:stable
     steps:
+      - aws-cli/setup 
       - checkout
       - setup_remote_docker
       - run: mkdir -p build/libs
@@ -103,9 +107,8 @@ jobs:
           name: Push application Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              echo “${DOCKERHUB_PASSWORD}” | docker login -u “${DOCKERHUB_USERNAME}” — password-stdin
-              docker tag hellospringapp "${DOCKERHUB_USERNAME}/hellospringapp:${CIRCLE_SHA1}" 
-              docker push "${DOCKERHUB_USERNAME}/hellospringapp:${CIRCLE_SHA1}"
+              docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}" 
+              docker push "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
             fi
 
 workflows:
