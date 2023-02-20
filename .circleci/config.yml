@@ -55,9 +55,9 @@ workflows:
   default:
     jobs:
       - compile
-      - lint-main
+      - lint-main:
           requires: [compile]
-      - lint-test
+      - lint-test:
           requires: [compile]
-      - test
+      - test:
           requires: [compile]
