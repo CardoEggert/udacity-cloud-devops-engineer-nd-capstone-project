@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  aws-cli: circleci/aws-cli@2.0.3
-
 jobs:
   load-dependencies:
     docker:
@@ -91,11 +88,18 @@ jobs:
 
   build-and-push-image:
     docker:
-      - image: cimg/base:stable
+      - image: docker
     steps:
-      - aws-cli/setup 
       - checkout
       - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+            pip install \
+              docker-compose==1.12.0 \
+              awscli==1.11.76
       - run: mkdir -p build/libs
       - attach_workspace:
           at: /build/libs
@@ -107,8 +111,10 @@ jobs:
           name: Push application Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}" 
-              docker push "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
+              login="$(aws ecr get-login)"
+              ${login}
+              docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+              docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
             fi
 
 workflows:
