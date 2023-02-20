@@ -83,12 +83,10 @@ jobs:
       - run: gradle bootJar
       - save_cache:
           paths:
-            - ~/.gradle
-            - ~/build/libs/HelloSpring-0.0.1-SNAPSHOT.jar
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+            - ~/build
+          key: build-${CIRCLE_SHA1}
 
   build-and-push-image:
-    working_directory: /app
     docker:
       - image: docker
     steps:
@@ -96,8 +94,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            - v1-dependencies-
+            - build-${CIRCLE_SHA1}
       - run:
           name: Build application Docker image
           command: |
