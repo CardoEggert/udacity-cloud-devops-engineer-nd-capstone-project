@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   compile:
     docker:
-      - image: circleci/openjdk:19-jdk
+      - image: cimg/openjdk:19.0.2
     steps:
       - checkout
       - restore_cache:
@@ -20,7 +20,7 @@ jobs:
 
   lint-main:
     docker:
-      - image: circleci/openjdk:19-jdk
+      - image: cimg/openjdk:19.0.2
     steps:
       - checkout
       - restore_cache:
@@ -31,7 +31,7 @@ jobs:
 
   lint-test:
     docker:
-      - image: circleci/openjdk:19-jdk
+      - image: cimg/openjdk:19.0.2
     steps:
       - checkout
       - restore_cache:
@@ -42,7 +42,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/openjdk:19-jdk
+      - image: cimg/openjdk:19.0.2
     steps:
       - checkout
       - restore_cache:
