@@ -1,5 +1,6 @@
 version: 2.1
-
+orbs:
+  aws-cli: circleci/aws-cli@3.1.4
 jobs:
   load-dependencies:
     docker:
@@ -96,14 +97,11 @@ jobs:
           ls -a
   build-and-push-image:
     docker:
-      - image: docker:23.0.1-cli-alpine3.17
+      - image: cimg/base:stable
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache aws-cli
+      - aws-cli/setup
       - restore_cache:
           key: build-directory-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       - run: |
