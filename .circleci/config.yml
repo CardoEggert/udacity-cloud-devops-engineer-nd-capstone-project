@@ -83,7 +83,7 @@ jobs:
             - v1-dependencies-
       - run: gradle bootJar
       - persist_to_workspace:
-          root: ~/project
+          root: ~/project-build
           paths:
             - .
       - run: |
@@ -98,9 +98,9 @@ jobs:
     docker:
       - image: docker:23.0.1-cli-alpine3.17
     steps:
-      - attach_workspace:
-          at: ~/project
       - setup_remote_docker
+      - attach_workspace:
+          at: ~/project-build
       - run:
           name: Install dependencies
           command: |
