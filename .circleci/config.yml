@@ -84,7 +84,7 @@ jobs:
       - save_cache:
           key: build-directory-${CIRCLE_WORKFLOW_ID:0:7}
           paths:
-            - /build
+            - build
       - run: |
           ls -a
           echo "Changing dir to build"
