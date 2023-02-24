@@ -74,7 +74,6 @@ jobs:
   build-jar:
     docker:
       - image: cimg/openjdk:19.0.2
-    working_directory: /udacity-cloud-devops-engineer-nd-capstone-project
     steps:
       - checkout
       - restore_cache:
@@ -97,7 +96,6 @@ jobs:
   build-and-push-image:
     docker:
       - image: docker:23.0.1-cli-alpine3.17
-    working_directory: /udacity-cloud-devops-engineer-nd-capstone-project
     steps:
       - checkout
       - setup_remote_docker
@@ -107,7 +105,7 @@ jobs:
           command: |
             apk add --no-cache aws-cli
       - attach_workspace:
-          at: /build/libs/HelloSpring-0.0.1-SNAPSHOT.jar
+          at: /udacity-cloud-devops-engineer-nd-capstone-project/build/libs
       - run: |
           ls -a
           echo "Changing dir to build"
