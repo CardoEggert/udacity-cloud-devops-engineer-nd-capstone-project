@@ -92,6 +92,7 @@ jobs:
       - image: docker:23.0.1-cli-alpine3.17
     steps:
       - checkout
+      - setup_remote_docker
       - run: mkdir -p build/libs
       - run:
           name: Install dependencies
