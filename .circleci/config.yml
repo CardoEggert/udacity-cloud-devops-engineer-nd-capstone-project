@@ -102,13 +102,15 @@ jobs:
               aws-cli containerd docker-compose
       - attach_workspace:
           at: /build/libs
-      - aws-ecr/build-and-push-image:
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build --tag=hellospringapp .
+      - aws-ecr/ecr-login
+      - aws-ecr/push-image:
           repo: hellospringapp
           tag: latest,$CIRCLE_SHA1
-          aws-access-key-id: ACCESS_AWS_ACCESS_KEY_IDKEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           region: AWS_DEFAULT_REGION
-          registry-id: AWS_ECR_REGISTRY_ID
 
 workflows:
   default:
