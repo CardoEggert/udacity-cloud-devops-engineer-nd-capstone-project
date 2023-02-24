@@ -104,7 +104,7 @@ jobs:
       - run:
           name: Build application Docker image
           command: |
-            docker build --tag=hellospringapp . 
+            docker build --tag=hellospringapp . --load
       - deploy:
           name: Push application Docker image
           command: |
