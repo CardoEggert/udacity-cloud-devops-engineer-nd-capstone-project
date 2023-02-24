@@ -84,7 +84,7 @@ jobs:
       - save_cache:
           key: build-directory-{{ .BuildNum }}
           paths:
-            - build
+            - /build
       - run: |
           ls -a
           echo "Changing dir to build"
