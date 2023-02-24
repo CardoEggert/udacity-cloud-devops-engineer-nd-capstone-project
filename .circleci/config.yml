@@ -89,7 +89,7 @@ jobs:
             - HelloSpring-0.0.1-SNAPSHOT.jar
   build-and-push-image:
     docker:
-      - image: docker
+      - image: cimg/base:stable
     steps:
       - checkout
       - run: mkdir -p build/libs
