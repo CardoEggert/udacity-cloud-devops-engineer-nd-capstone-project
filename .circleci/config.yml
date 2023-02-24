@@ -92,6 +92,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - run: mkdir -p build/libs
+      - checkout
       - attach_workspace:
           at: /build/libs
       - aws-ecr/build-and-push-image:
