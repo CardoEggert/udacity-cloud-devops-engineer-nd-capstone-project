@@ -97,9 +97,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
             apk add --no-cache \
-              aws-cli
+              aws-cli containerd docker-compose
       - attach_workspace:
           at: /build/libs
       - run:
