@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  aws-ecr: circleci/aws-ecr@x.y
 
 jobs:
   load-dependencies:
@@ -87,19 +85,35 @@ jobs:
           root: build/libs
           paths:
             - HelloSpring-0.0.1-SNAPSHOT.jar
+# Reference to article: https://circleci.com/blog/how-to-build-a-docker-image-on-circleci-2-0/
+# Used it for building and pushing docker image to amazon ecr 
   build-and-push-image:
+    docker:
+      - image: docker:23.0.1-cli-alpine3.17
     steps:
       - checkout
+      - setup_remote_docker
       - run: mkdir -p build/libs
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              aws-cli containerd docker-compose
       - attach_workspace:
           at: /build/libs
-      - aws-ecr/build-and-push-image:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: SECRET_ACCAWS_SECRET_ACCESS_KEY
-          region: AWS_DEFAULT_REGION
-          registry-id: AWS_ECR_REGISTRY_ID
-          repo: hellospringapp
-          tag: 'latest, hellospringapp'
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build --tag=hellospringapp .
+      - deploy:
+          name: Push application Docker image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "main" ]; then
+              login="$(aws ecr get-login-password)"
+              ${login}
+              docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
+              docker push "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
+            fi
 
 workflows:
   default:
