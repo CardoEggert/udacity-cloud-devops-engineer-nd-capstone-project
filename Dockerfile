@@ -6,6 +6,6 @@ COPY build/libs/ /app/
 
 EXPOSE 8080
 
-RUN chmod +x /app/HelloSpring-0.0.1-SNAPSHOT.jar
+RUN chmod +x HelloSpring-0.0.1-SNAPSHOT.jar
 
 ENTRYPOINT ["java", "-jar", "/app/HelloSpring-0.0.1-SNAPSHOT.jar"]
