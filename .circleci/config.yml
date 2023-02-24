@@ -98,11 +98,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --no-cache \
-              py3-pip
-            apk add --no-cache \
-              docker-compose
-            apk add --no-cache \
-              aws-cli
+              docker-compose aws-cli docker-cli
       - attach_workspace:
           at: /build/libs
       - run:
