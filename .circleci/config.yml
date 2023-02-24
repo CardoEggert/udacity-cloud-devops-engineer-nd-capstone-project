@@ -103,8 +103,8 @@ jobs:
       - attach_workspace:
           at: /build/libs
       - aws-ecr/build-and-push-image:
-        repo: hellospringapp
-        tag: latest,$CIRCLE_SHA1
+          repo: hellospringapp
+          tag: latest,$CIRCLE_SHA1
 
 workflows:
   default:
