@@ -1,5 +1,6 @@
 FROM openjdk:19-alpine
 
+RUN mkdir -p /app
 WORKDIR /app
 
 COPY build/libs/ /app/
