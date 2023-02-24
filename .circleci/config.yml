@@ -85,6 +85,14 @@ jobs:
           root: build/libs
           paths:
             - HelloSpring-0.0.1-SNAPSHOT.jar
+      - run: |
+          ls -a
+          echo "Changing dir to build"
+          cd build
+          ls -a
+          echo "Changing dir to libs"
+          cd libs
+          ls -a
   build-and-push-image:
     docker:
       - image: docker:23.0.1-cli-alpine3.17
@@ -98,6 +106,14 @@ jobs:
             apk add --no-cache aws-cli
       - attach_workspace:
           at: /build/libs
+      - run: |
+          ls -a
+          echo "Changing dir to build"
+          cd build
+          ls -a
+          echo "Changing dir to libs"
+          cd libs
+          ls -a
       - run:
           name: Build application Docker image
           command: |
