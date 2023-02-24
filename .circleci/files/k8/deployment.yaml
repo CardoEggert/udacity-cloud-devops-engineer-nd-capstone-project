@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellospringapp-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hellospringapp-api
+  template:
+    metadata:
+      labels:
+        app: hellospringapp-api
+    spec:
+      containers:
+      - name: hellospringapp-api
+        image: 091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:e50625d37a1240f85adef7d3709c36b1e7f05207
+        ports:
+        - containerPort: 8080
