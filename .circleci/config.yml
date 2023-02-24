@@ -105,7 +105,7 @@ jobs:
           command: |
             apk add --no-cache aws-cli
       - attach_workspace:
-          at: /build/libs
+          at: /build/libs/HelloSpring-0.0.1-SNAPSHOT.jar
       - run: |
           ls -a
           echo "Changing dir to build"
