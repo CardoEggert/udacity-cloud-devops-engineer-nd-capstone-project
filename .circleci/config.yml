@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  aws-ecr: circleci/aws-ecr@8.2.1
-
 jobs:
   load-dependencies:
     docker:
@@ -95,17 +92,26 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: mkdir -p build/libs
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache aws-cli
       - attach_workspace:
           at: /build/libs
       - run:
           name: Build application Docker image
           command: |
             docker build --tag=hellospringapp .
-      - aws-ecr/ecr-login
-      - aws-ecr/push-image:
-          repo: hellospringapp
-          tag: latest,$CIRCLE_SHA1
-          region: AWS_DEFAULT_REGION
+      - run:
+          name: Login and push to AWS ECR
+          comman: |
+            aws ecr get-login-password \
+              --region ${AWS_DEFAULT_REGION} \
+            | docker login \
+              --username AWS \
+              --password-stdin ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+            docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
 
 workflows:
   default:
@@ -125,3 +131,7 @@ workflows:
           requires: [test, lint-test, lint-main, compile-main, compile-test]
       - build-and-push-image:
           requires: [build-jar]
+          filters:
+            branches:
+              only: 
+                - main
