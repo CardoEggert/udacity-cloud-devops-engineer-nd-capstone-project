@@ -84,8 +84,9 @@ jobs:
       - save_cache:
           key: build-directory-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
-            - build
+            - build/libs/
       - run: |
+          pwd
           ls -a
           echo "Changing dir to build"
           cd build
