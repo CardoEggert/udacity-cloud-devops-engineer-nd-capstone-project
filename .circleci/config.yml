@@ -82,9 +82,9 @@ jobs:
             - v1-dependencies-
       - run: gradle bootJar
       - save_cache:
-          key: build-directory-{{ CIRCLE_WORKFLOW_ID:0:7 }}
+          key: build-directory-{{ .BuildNum }}
           paths:
-            - build/libs/HelloSpring-0.0.1-SNAPSHOT.jar
+            - build
       - run: |
           ls -a
           echo "Changing dir to build"
@@ -104,7 +104,7 @@ jobs:
           command: |
             apk add --no-cache aws-cli
       - restore_cache:
-          key: build-directory-{{ CIRCLE_WORKFLOW_ID:0:7 }}
+          key: build-directory-{{ .BuildNum }}
       - run: |
           ls -a
           echo "Changing dir to build"
