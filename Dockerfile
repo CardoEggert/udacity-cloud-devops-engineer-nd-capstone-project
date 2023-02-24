@@ -2,8 +2,8 @@ FROM openjdk:19-alpine
 
 WORKDIR /app
 
-COPY build/ /app/
+COPY build/libs/ /app/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar", "libs/HelloSpring-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar", "HelloSpring-0.0.1-SNAPSHOT.jar"]
