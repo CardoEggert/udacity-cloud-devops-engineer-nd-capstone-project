@@ -109,7 +109,7 @@ jobs:
           name: Push application Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              login="$(aws ecr get-login)"
+              login="$(aws ecr get-login-password)"
               ${login}
               docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
               docker push "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
