@@ -91,15 +91,11 @@ jobs:
   build-and-push-image:
     docker:
       - image: docker:23.0.1-cli-alpine3.17
+    working_directory: /tmp
     steps:
       - checkout
       - setup_remote_docker
       - run: mkdir -p build/libs
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache \
-              aws-cli containerd docker-compose
       - attach_workspace:
           at: /build/libs
       - run:
