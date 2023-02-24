@@ -74,6 +74,7 @@ jobs:
   build-jar:
     docker:
       - image: cimg/openjdk:19.0.2
+    working_directory: ~/project-build
     steps:
       - checkout
       - restore_cache:
@@ -82,9 +83,9 @@ jobs:
             - v1-dependencies-
       - run: gradle bootJar
       - persist_to_workspace:
-          root: build/libs
+          root: ~/project
           paths:
-            - HelloSpring-0.0.1-SNAPSHOT.jar
+            - .
       - run: |
           ls -a
           echo "Changing dir to build"
@@ -97,15 +98,13 @@ jobs:
     docker:
       - image: docker:23.0.1-cli-alpine3.17
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/project
       - setup_remote_docker
-      - run: mkdir -m=rwx -p build/libs
       - run:
           name: Install dependencies
           command: |
             apk add --no-cache aws-cli
-      - attach_workspace:
-          at: /udacity-cloud-devops-engineer-nd-capstone-project/build/libs
       - run: |
           ls -a
           echo "Changing dir to build"
