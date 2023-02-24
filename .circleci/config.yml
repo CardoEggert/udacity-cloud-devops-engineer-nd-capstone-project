@@ -93,7 +93,6 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p build/libs
-      - setup_remote_docker
       - run:
           name: Install dependencies
           command: |
