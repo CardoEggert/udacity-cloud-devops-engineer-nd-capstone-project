@@ -6,4 +6,6 @@ COPY build/libs/ /app/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar", "HelloSpring-0.0.1-SNAPSHOT.jar"]
+CMD ["ls", "-a"]
+
+ENTRYPOINT ["java", "-jar", "/app/HelloSpring-0.0.1-SNAPSHOT.jar"]
