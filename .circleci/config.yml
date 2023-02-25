@@ -86,15 +86,6 @@ jobs:
           key: build-directory-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
             - build/libs/
-      - run: |
-          pwd
-          ls -a
-          echo "Changing dir to build"
-          cd build
-          ls -a
-          echo "Changing dir to libs"
-          cd libs
-          ls -a
   build-and-push-image:
     docker:
       - image: cimg/base:stable
@@ -104,15 +95,6 @@ jobs:
       - aws-cli/setup
       - restore_cache:
           key: build-directory-{{ .Environment.CIRCLE_WORKFLOW_ID }}
-      - run: |
-          pwd
-          ls -a
-          echo "Changing dir to build"
-          cd build
-          ls -a
-          echo "Changing dir to libs"
-          cd libs
-          ls -a
       - run:
           name: Build application Docker image
           command: |
@@ -127,6 +109,19 @@ jobs:
               --password-stdin ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
             docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
             docker push "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
+  configure-k8:
+    docker:
+      - image: cimg/base:stable
+      - checkout
+      - setup_remote_docker
+      - aws-cli/setup
+      - run:
+          name: Run Cloudformation script if AWS EKS Cluster is not up yet
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/configure-k8.yml \
+              --stack-name "capstone" \
+              --parameter-overrides EnvironmentName="capstone"
 
 workflows:
   default:
@@ -150,3 +145,5 @@ workflows:
             branches:
               only: 
                 - main
+      - configure-k8:
+          requires: [build-and-push-image]
