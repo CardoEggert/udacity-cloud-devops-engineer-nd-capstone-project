@@ -146,10 +146,6 @@ jobs:
           get-rollout-status: true
           resource-file-path: .circleci/files/k8/service.yaml
           resource-name: deployment/hellospringapp-api
-      - kubernetes/update-container-image:
-          get-rollout-status: true
-          container-image-updates: "capstone-frontend=091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:latest"
-          resource-name: deployment/hellospringapp-api
 
 workflows:
   default:
