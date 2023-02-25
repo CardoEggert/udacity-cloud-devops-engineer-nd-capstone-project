@@ -114,10 +114,9 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - setup_remote_docker
       - aws-cli/setup
       - run:
-          name: Run Cloudformation script if AWS EKS Cluster is not up yet
+          name: Deploy K8 stack if not present
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/configure-k8.yml \
