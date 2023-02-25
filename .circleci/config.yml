@@ -112,6 +112,7 @@ jobs:
   configure-k8:
     docker:
       - image: cimg/base:stable
+    steps:
       - checkout
       - setup_remote_docker
       - aws-cli/setup
