@@ -161,7 +161,7 @@ jobs:
           command: |
             export LB_URL=$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[0].DNSName" --output=text)
             echo $LB_URL
-            if curl -sI "http://${LB_URL}/v1/hello?name=Capstone" | grep 200
+            if curl -sI "http://${LB_URL}/v2/hello?name=Capstone" | grep 200
             then
                 exit 0
             else
