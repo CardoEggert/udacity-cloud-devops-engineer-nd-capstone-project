@@ -22,8 +22,9 @@ After commiting a new change the following will happen.
 1. Does linting, compiling, and testing.
 2. Builds jar file
 3. Builds docker image with the created jar file
+4. Pushes docker image to AWS ECR
 4. Deploys K8 using CloudFormation
-5. Deploys app to K8 
+5. Deploys app to K8 (applies deployment and service yaml files, afterwards updates docker image) 
 6. Runs smoke tests (does curl command to newly deployed app) 
 
 After applying service.yaml to K8, AWS EKS creates Elastic Load Balancer which can be used to make requests. The same is done inside using smoke tests.
