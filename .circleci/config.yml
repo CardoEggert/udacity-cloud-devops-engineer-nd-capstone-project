@@ -176,4 +176,5 @@ workflows:
       - configure-k8:
           requires: [build-and-push-image]
       - deploy-app:
+          cluster-name: capstone-Project-Cluster
           requires: [configure-k8]
