@@ -1,7 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hellospringapp-api
+  name: hellospringapp-api-service
+  namespace: hellospringapp
+  labels:
+    app: hellospringapp-api
 spec:
   replicas: 2
   selector:
