@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: hellospringapp-api
-        image: 091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:e50625d37a1240f85adef7d3709c36b1e7f05207
+        image: 091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:latest
         ports:
         - containerPort: 8080

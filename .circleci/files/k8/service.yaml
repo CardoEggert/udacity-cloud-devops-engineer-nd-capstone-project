@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: hellospringapp-api-service
 spec:
+  type: LoadBalancer
   selector:
     app: hellospringapp-api
   ports:
-  - name: http
+  - name: tcp
     port: 80
     targetPort: 8080
-  type: LoadBalancer
