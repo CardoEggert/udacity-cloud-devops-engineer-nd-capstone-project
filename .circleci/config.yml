@@ -110,7 +110,9 @@ jobs:
               --username AWS \
               --password-stdin ${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
             docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:latest"
+            docker tag hellospringapp "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
             docker push "${ECR_ENDPOINT}/hellospringapp:latest"
+            docker push "${ECR_ENDPOINT}/hellospringapp:${CIRCLE_SHA1}"
   configure-k8:
     docker:
       - image: cimg/base:stable
@@ -147,7 +149,7 @@ jobs:
           resource-file-path: .circleci/files/k8/service.yaml
           resource-name: deployment/hellospringapp-api
       - kubernetes/update-container-image:
-          container-image-updates: 'hellospringapp-api=091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:latest'
+          container-image-updates: 'hellospringapp-api=091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:${CIRCLE_SHA1}'
           get-rollout-status: true
           resource-name: deployment/hellospringapp-api
   smoke-test:
