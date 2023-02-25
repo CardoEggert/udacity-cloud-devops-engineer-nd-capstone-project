@@ -150,6 +150,23 @@ jobs:
           container-image-updates: 'hellospringapp-api=091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:latest'
           get-rollout-status: true
           resource-name: deployment/hellospringapp-api
+  smoke-test:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - aws-cli/setup
+      - run:
+          name: cURL to endpoints
+          command: |
+            export LB_URL=$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[0].DNSName" --output=text)
+            echo $LB_URL
+            if curl -sI "http://${LB_URL}/v1/hello?name=Capstone" | grep 200
+            then
+                exit 0
+            else
+                exit 1
+            fi
 
 workflows:
   default:
@@ -178,3 +195,5 @@ workflows:
       - deploy-app:
           cluster-name: capstone-Project-Cluster
           requires: [configure-k8]
+      - smoke-test:
+          requires: [deploy-app]
