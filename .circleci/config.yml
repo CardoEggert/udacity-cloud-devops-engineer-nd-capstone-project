@@ -147,7 +147,7 @@ jobs:
           resource-file-path: .circleci/files/k8/service.yaml
           resource-name: deployment/hellospringapp-api
       - kubernetes/update-container-image:
-          container-image-updates: '091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp=091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:latest'
+          container-image-updates: 'hellospringapp=091499481377.dkr.ecr.us-east-1.amazonaws.com/hellospringapp:latest'
           get-rollout-status: true
           resource-name: deployment/hellospringapp-api
 
